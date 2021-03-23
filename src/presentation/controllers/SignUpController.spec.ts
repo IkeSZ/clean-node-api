@@ -6,9 +6,14 @@ import { InvalidParamError, MissingParamError, ServerError } from '../errors'
 // Protocols
 import { IEmailValidator } from '../protocols/IEmailValidator'
 
+// UseCases
+import { IAddAccount, IAddAccountModel } from '../../domain/usecases/IAddAccount'
+import { IAccountModel } from '../../domain/usecases/models/Account'
+
 interface ISutTypes {
   sut: SignUpController
   emailValidatorStub: IEmailValidator
+  addAccountStub: IAddAccount
 }
 
 const makeEmailValidator = (): IEmailValidator => {
@@ -21,13 +26,33 @@ const makeEmailValidator = (): IEmailValidator => {
   return new EmailValidatorStub()
 }
 
+const makeAddAccount = (): IAddAccount => {
+  class AddAccountStub implements IAddAccount {
+    public add (account: IAddAccountModel): IAccountModel {
+      const fakeAccount = {
+        id: 'valid_id',
+        name: 'valid_name',
+        email: 'valid_email@name.com',
+        password: '123456'
+      }
+
+      return fakeAccount
+    }
+  }
+
+  return new AddAccountStub()
+}
+
 const makeSut = (): ISutTypes => {
   const emailValidatorStub = makeEmailValidator()
-  const sut = new SignUpController(emailValidatorStub)
+  const addAccountStub = makeAddAccount()
+
+  const sut = new SignUpController(emailValidatorStub, addAccountStub)
 
   return {
     sut,
-    emailValidatorStub
+    emailValidatorStub,
+    addAccountStub
   }
 }
 
@@ -169,5 +194,27 @@ describe('SignUp Controller', () => {
 
     expect(httpResponse.statusCode).toBe(400)
     expect(httpResponse.body).toEqual(new InvalidParamError('passwordConfirmation'))
+  })
+
+  it('should be able to call AddAccountController if all values is correct', () => {
+    const { sut, addAccountStub } = makeSut()
+    const addSpy = jest.spyOn(addAccountStub, 'add')
+
+    const httpRequest = {
+      body: {
+        name: 'any_name',
+        email: 'any_email@name.com',
+        password: '123456',
+        passwordConfirmation: '123456'
+      }
+    }
+
+    sut.handle(httpRequest)
+
+    expect(addSpy).toHaveBeenCalledWith({
+      name: 'any_name',
+      email: 'any_email@name.com',
+      password: '123456'
+    })
   })
 })
