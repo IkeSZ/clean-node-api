@@ -11,10 +11,10 @@ interface ISutTypes {
   emailValidatorStub: IEmailValidator
 }
 
-const makeEmailValidator = (returnValue: any): IEmailValidator => {
+const makeEmailValidator = (): IEmailValidator => {
   class EmailValidatorStub implements IEmailValidator {
     public isValid (email: string): boolean {
-      throw returnValue
+      return true
     }
   }
 
@@ -22,7 +22,7 @@ const makeEmailValidator = (returnValue: any): IEmailValidator => {
 }
 
 const makeSut = (): ISutTypes => {
-  const emailValidatorStub = makeEmailValidator(true)
+  const emailValidatorStub = makeEmailValidator()
   const sut = new SignUpController(emailValidatorStub)
 
   return {
@@ -133,8 +133,10 @@ describe('SignUp Controller', () => {
   })
 
   it('should be able to return 500 if EmailValidator throws', () => {
-    const emailValidatorStub = makeEmailValidator(new Error())
-    const sut = new SignUpController(emailValidatorStub)
+    const { sut, emailValidatorStub } = makeSut()
+    jest.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => {
+      throw new Error()
+    })
 
     const httpRequest = {
       body: {
