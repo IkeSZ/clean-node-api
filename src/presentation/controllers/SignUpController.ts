@@ -1,7 +1,5 @@
 // Protocols
-import { IHttpRequest, IHttpResponse } from '../protocols/IHttp'
-import { IController } from '../protocols/IController'
-import { IEmailValidator } from '../protocols/IEmailValidator'
+import { IController, IEmailValidator, IHttpRequest, IHttpResponse } from '../protocols'
 
 // Errors
 import { MissingParamError, InvalidParamError } from '../errors'
