@@ -1,14 +1,10 @@
 import { SignUpController } from './SignUpController'
 
 // Errors
-import { InvalidParamError, MissingParamError, ServerError } from '../errors'
+import { InvalidParamError, MissingParamError, ServerError } from '../../errors'
 
 // Protocols
-import { IEmailValidator } from '../protocols/IEmailValidator'
-
-// UseCases
-import { IAddAccount, IAddAccountModel } from '../../domain/usecases/IAddAccount'
-import { IAccountModel } from '../../domain/usecases/models/Account'
+import { IEmailValidator, IAddAccount, IAccountModel, IAddAccountModel } from './SignUpProtocols'
 
 interface ISutTypes {
   sut: SignUpController

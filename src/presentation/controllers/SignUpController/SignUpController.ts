@@ -1,14 +1,15 @@
 // Protocols
-import { IController, IEmailValidator, IHttpRequest, IHttpResponse } from '../protocols'
+import {
+  IController,
+  IEmailValidator,
+  IHttpRequest, IHttpResponse, IAddAccount
+} from './SignUpProtocols'
 
 // Errors
-import { MissingParamError, InvalidParamError } from '../errors'
+import { MissingParamError, InvalidParamError } from '../../errors'
 
 // Helpers
-import { badRequest, serverError } from '../helpers/httpHelper'
-
-// UseCases
-import { IAddAccount } from '../../domain/usecases/IAddAccount'
+import { badRequest, serverError } from '../../helpers/httpHelper'
 
 class SignUpController implements IController {
   constructor (
