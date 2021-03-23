@@ -4,8 +4,7 @@ import { IController } from '../protocols/IController'
 import { IEmailValidator } from '../protocols/IEmailValidator'
 
 // Errors
-import { MissingParamError } from '../errors/MissingParamError'
-import { InvalidParamError } from '../errors/InvalidParamError'
+import { MissingParamError, InvalidParamError } from '../errors'
 
 // Helpers
 import { badRequest, serverError } from '../helpers/httpHelper'

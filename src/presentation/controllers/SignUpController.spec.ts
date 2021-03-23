@@ -1,9 +1,7 @@
 import { SignUpController } from './SignUpController'
 
 // Errors
-import { MissingParamError } from '../errors/MissingParamError'
-import { InvalidParamError } from '../errors/InvalidParamError'
-import { ServerError } from '../errors/ServerError'
+import { InvalidParamError, MissingParamError, ServerError } from '../errors'
 
 // Protocols
 import { IEmailValidator } from '../protocols/IEmailValidator'
