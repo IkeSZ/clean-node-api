@@ -6,6 +6,12 @@ import { IEncrypter } from '../../data/protocols/IEncrypter'
 // Bcrypt
 import bcrypt from 'bcrypt'
 
+jest.mock('bcrypt', () => ({
+  async hash (): Promise<string> {
+    return new Promise(resolve => resolve('encrypted_hash'))
+  }
+}))
+
 interface ISutTypes {
   sut: IEncrypter
   salt: number
@@ -29,5 +35,13 @@ describe('BcryptAdapter', () => {
     await sut.encrypt('any_value')
 
     expect(hashSpy).toHaveBeenCalledWith('any_value', salt)
+  })
+
+  it('should be able to return a hash on success', async () => {
+    const { sut } = makeSut()
+
+    const encryptedValue = await sut.encrypt('any_value')
+
+    expect(encryptedValue).toBe('encrypted_hash')
   })
 })
